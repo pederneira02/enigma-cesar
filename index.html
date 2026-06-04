@@ -7,8 +7,8 @@
     <style>
         :root {
             --bg-color: #0a0a0a;
-            --text-color: #e8dcc4; /* Tom de pergaminho antigo/dourado */
-            --accent-color: #8b0000; /* Vermelho escuro/sangue */
+            --text-color: #e8dcc4; 
+            --accent-color: #8b0000; 
             --border-color: #333333;
             --gold: #a38954;
         }
@@ -19,7 +19,6 @@
             background-color: var(--bg-color);
             color: var(--text-color);
         }
-        /* O cabeçalho usa a imagem que você enviou */
         .header {
             position: relative;
             width: 100%;
@@ -78,7 +77,7 @@
             font-size: 1.8em;
         }
         
-        /* Grid de Cartões para Regras e Conselhos */
+        /* Grid de Cartões */
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -178,12 +177,73 @@
             color: #ccc;
         }
 
+        /* Ferramenta Cifra de César */
+        .cipher-box {
+            background: #1a1a1a;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 5px;
+            margin: 30px 0;
+        }
+        .cipher-box h3 {
+            color: var(--gold);
+            margin-top: 0;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .cipher-controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+        .cipher-controls input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #444;
+            color: #fff;
+            font-family: monospace;
+            font-size: 1.1em;
+            border-radius: 4px;
+        }
+        .cipher-controls input[type="number"] {
+            width: 80px;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #444;
+            color: var(--gold);
+            font-family: monospace;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .cipher-controls input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 8px var(--accent-color);
+        }
+        .cipher-result {
+            padding: 15px;
+            background: #000;
+            border: 1px dashed var(--gold);
+            color: #666;
+            font-family: monospace;
+            font-size: 1.2em;
+            border-radius: 4px;
+            min-height: 24px;
+            word-wrap: break-word;
+            text-transform: uppercase;
+        }
+
         /* Cofre / Inputs */
         .vault {
             display: flex;
             flex-direction: column;
             gap: 15px;
-            margin-top: 30px;
         }
         .room {
             display: flex;
@@ -191,7 +251,7 @@
             justify-content: space-between;
             background: #1e1e1e;
             padding: 15px 20px;
-            border-left: 5px solid var(--accent-color);
+            border-left: 5px solid var(--gold);
             border-radius: 5px;
         }
         .room label {
@@ -212,8 +272,8 @@
         }
         .room input:focus {
             outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 8px var(--accent-color);
+            border-color: var(--gold);
+            box-shadow: 0 0 8px var(--gold);
         }
 
         /* Botão de Salvar */
@@ -271,6 +331,8 @@
             .room { flex-direction: column; align-items: flex-start; gap: 10px; }
             .room input { width: 90%; }
             .header h1 { font-size: 2.5em; }
+            .cipher-controls { flex-direction: column; }
+            .cipher-controls input[type="number"] { width: 100%; box-sizing: border-box; }
         }
     </style>
 </head>
@@ -338,10 +400,24 @@
             </div>
         </div>
 
-        <!-- COFRE (Sistema Funcional) -->
+        <!-- SEÇÃO DO COFRE COM A CIFRA DE CÉSAR INTEGRADA -->
         <h2 class="section-title">Cofre de Passagens</h2>
         <p style="text-align:center; font-size: 0.9em; color:#888; font-style: italic;">Nota: Suas senhas são salvas automaticamente neste navegador.</p>
         
+        <!-- Ferramenta de Cifra -->
+        <div class="cipher-box">
+            <h3>Decodificador Imperial</h3>
+            <p style="margin: 0; color: #ccc; font-size: 0.95em;">Encontrou uma mensagem oculta? Digite o código e ajuste a chave de deslocamento (Padrão de César: -3).</p>
+            
+            <div class="cipher-controls">
+                <input type="text" id="cipherInput" placeholder="Digite a pista codificada aqui..." oninput="calcularCifra()">
+                <input type="number" id="cipherShift" value="-3" title="Deslocamento da Cifra" oninput="calcularCifra()">
+            </div>
+            
+            <div class="cipher-result" id="cipherOutput">A TRADUÇÃO APARECERÁ AQUI...</div>
+        </div>
+
+        <!-- Inputs dos Quartos -->
         <div class="vault" id="vault">
             <!-- Os campos serão gerados pelo JavaScript -->
         </div>
@@ -372,10 +448,10 @@
             <p>Assim como na Guerra das Gálias, você deve dividir para conquistar. Analise cada frase da dica separadamente.</p>
             
             <h3>O CÓDIGO SECRETO</h3>
-            <p>Se encontrar algo que pareça aleatório, tente mover as letras 3 posições para trás. A história se repete.</p>
+            <p>Se encontrar algo que pareça aleatório, tente usar o Decodificador Imperial acima. A história se repete.</p>
         </div>
 
-        <!-- PÁGINA 12 (Adaptada) -->
+        <!-- PÁGINA 12 -->
         <h2 class="section-title">O Destino Final</h2>
         <div class="text-block">
             <h3>23 FERIDAS NO ORGULHO</h3>
@@ -402,11 +478,12 @@
             <h3>DÚVIDAS, LEGIONÁRIO?</h3>
             <p>O enigma espera por você. Honre o nome de Roma.</p>
             <p style="margin-top: 15px; color: var(--gold);"><strong>Quarto Inicial:</strong> 0enigmasete &nbsp;|&nbsp; <strong>Objetivo:</strong> 7enigmasete</p>
-            <p style="margin-top: 40px; font-size: 0.8em; letter-spacing: 5px;">Marco-8319</p>
+            <p style="margin-top: 40px; font-size: 0.8em; letter-spacing: 5px;">S P Q R</p>
         </div>
     </div>
 
     <script>
+        // --- CÓDIGO DO COFRE DE SENHAS ---
         const quartos = [
             "1enigmasete",
             "2enigmasete",
@@ -419,7 +496,7 @@
 
         const vaultContainer = document.getElementById('vault');
 
-        // Função para criar os campos de senha
+        // Cria os campos de senha
         quartos.forEach((quarto) => {
             const roomDiv = document.createElement('div');
             roomDiv.className = 'room';
@@ -437,7 +514,7 @@
             vaultContainer.appendChild(roomDiv);
         });
 
-        // Carregar senhas salvas ao abrir o site
+        // Carrega as senhas ao abrir a página
         function carregarSenhas() {
             quartos.forEach(quarto => {
                 const savedPassword = localStorage.getItem(quarto);
@@ -447,7 +524,7 @@
             });
         }
 
-        // Salvar senhas quando clicar no botão
+        // Salva as senhas
         function salvarSenhas() {
             quartos.forEach(quarto => {
                 const value = document.getElementById(quarto).value;
@@ -455,14 +532,47 @@
             });
             
             const status = document.getElementById('statusMessage');
-            status.innerText = "Chaves gravadas com sucesso!";
+            status.innerText = "Chaves gravadas com sucesso no pergaminho!";
             setTimeout(() => {
                 status.innerText = "";
             }, 3500);
         }
 
-        // Inicia o carregamento assim que a página abre
         carregarSenhas();
+
+        // --- CÓDIGO DA CIFRA DE CÉSAR ---
+        function calcularCifra() {
+            const text = document.getElementById('cipherInput').value;
+            const shift = parseInt(document.getElementById('cipherShift').value) || 0;
+            let result = '';
+
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                
+                // Checa se é uma letra (ignora números e símbolos)
+                if (char.match(/[a-z]/i)) {
+                    const code = text.charCodeAt(i);
+                    // Letras Maiúsculas
+                    if (code >= 65 && code <= 90) {
+                        char = String.fromCharCode(((code - 65 + shift) % 26 + 26) % 26 + 65);
+                    }
+                    // Letras Minúsculas
+                    else if (code >= 97 && code <= 122) {
+                        char = String.fromCharCode(((code - 97 + shift) % 26 + 26) % 26 + 97);
+                    }
+                }
+                result += char;
+            }
+            
+            const outputElement = document.getElementById('cipherOutput');
+            if (text === '') {
+                outputElement.innerText = 'A TRADUÇÃO APARECERÁ AQUI...';
+                outputElement.style.color = '#666';
+            } else {
+                outputElement.innerText = result;
+                outputElement.style.color = '#fff';
+            }
+        }
     </script>
 </body>
 </html>
