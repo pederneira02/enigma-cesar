@@ -65,7 +65,36 @@
             margin-bottom: 50px;
             color: var(--gold);
             font-style: italic;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
+        
+        /* Botão para entrar no Habbo */
+        .play-btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: var(--accent-color);
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            font-style: normal;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            border: 2px solid var(--gold);
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 0, 0, 0.5);
+        }
+        .play-btn:hover {
+            background-color: #5c0000;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(163, 137, 84, 0.4);
+        }
+
         .section-title {
             text-align: center;
             color: var(--accent-color);
@@ -75,6 +104,15 @@
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 15px;
             font-size: 1.8em;
+        }
+        .sub-title {
+            text-align: center;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
         }
         
         /* Grid de Cartões */
@@ -177,6 +215,15 @@
             color: #ccc;
         }
 
+        /* Container de Ferramentas */
+        .tools-container {
+            background: #111;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
         /* Ferramenta Cifra de César */
         .cipher-box {
             background: #1a1a1a;
@@ -184,14 +231,6 @@
             border: 1px solid var(--border-color);
             border-left: 4px solid var(--accent-color);
             border-radius: 5px;
-            margin: 30px 0;
-        }
-        .cipher-box h3 {
-            color: var(--gold);
-            margin-top: 0;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
         }
         .cipher-controls {
             display: flex;
@@ -333,6 +372,7 @@
             .header h1 { font-size: 2.5em; }
             .cipher-controls { flex-direction: column; }
             .cipher-controls input[type="number"] { width: 100%; box-sizing: border-box; }
+            .play-btn { width: 100%; box-sizing: border-box; text-align: center; }
         }
     </style>
 </head>
@@ -345,9 +385,10 @@
 
     <div class="container">
         
-        <!-- PÁGINA 1 -->
+        <!-- PÁGINA 1 COM BOTÃO DO HABBO -->
         <div class="intro">
             <p>A sorte está lançada no Habbo Hotel.</p>
+            <a href="https://www.habbo.com.br/room/146164066" target="_blank" class="play-btn">Adentrar ao Império (Jogar Agora)</a>
         </div>
 
         <!-- PÁGINA 2 -->
@@ -400,29 +441,34 @@
             </div>
         </div>
 
-        <!-- SEÇÃO DO COFRE COM A CIFRA DE CÉSAR INTEGRADA -->
-        <h2 class="section-title">Cofre de Passagens</h2>
-        <p style="text-align:center; font-size: 0.9em; color:#888; font-style: italic;">Nota: Suas senhas são salvas automaticamente neste navegador.</p>
-        
-        <!-- Ferramenta de Cifra -->
-        <div class="cipher-box">
-            <h3>Decodificador Imperial</h3>
-            <p style="margin: 0; color: #ccc; font-size: 0.95em;">Encontrou uma mensagem oculta? Digite o código e ajuste a chave de deslocamento (Padrão de César: -3).</p>
+        <!-- SEÇÃO DE FERRAMENTAS DO IMPÉRIO -->
+        <h2 class="section-title">Ferramentas do Império</h2>
+        <div class="tools-container">
             
-            <div class="cipher-controls">
-                <input type="text" id="cipherInput" placeholder="Digite a pista codificada aqui..." oninput="calcularCifra()">
-                <input type="number" id="cipherShift" value="-3" title="Deslocamento da Cifra" oninput="calcularCifra()">
+            <!-- Ferramenta 1: Cifra de César -->
+            <h3 class="sub-title" style="margin-top: 0;">I. Decodificador Imperial</h3>
+            <div class="cipher-box">
+                <p style="margin: 0; color: #ccc; font-size: 0.95em;">Encontrou uma mensagem oculta? Digite o código e ajuste a chave de deslocamento (Padrão de César: 7).</p>
+                
+                <div class="cipher-controls">
+                    <input type="text" id="cipherInput" placeholder="Digite a pista codificada aqui..." oninput="calcularCifra()">
+                    <input type="number" id="cipherShift" value="7" title="Deslocamento da Cifra" oninput="calcularCifra()">
+                </div>
+                
+                <div class="cipher-result" id="cipherOutput">A TRADUÇÃO APARECERÁ AQUI...</div>
             </div>
-            
-            <div class="cipher-result" id="cipherOutput">A TRADUÇÃO APARECERÁ AQUI...</div>
-        </div>
 
-        <!-- Inputs dos Quartos -->
-        <div class="vault" id="vault">
-            <!-- Os campos serão gerados pelo JavaScript -->
+            <!-- Ferramenta 2: Cofre de Passagens -->
+            <h3 class="sub-title" style="margin-top: 50px;">II. Cofre de Passagens</h3>
+            <p style="text-align:center; font-size: 0.9em; color:#888; font-style: italic; margin-bottom: 25px;">Nota: Suas senhas são salvas automaticamente neste navegador.</p>
+            
+            <div class="vault" id="vault">
+                <!-- Os campos serão gerados pelo JavaScript -->
+            </div>
+            <button class="save-btn" onclick="salvarSenhas()">Gravar no Pergaminho</button>
+            <div class="status" id="statusMessage"></div>
+
         </div>
-        <button class="save-btn" onclick="salvarSenhas()">Gravar no Pergaminho</button>
-        <div class="status" id="statusMessage"></div>
 
         <!-- PÁGINA 10 -->
         <h2 class="section-title">Conselhos de Roma</h2>
@@ -478,7 +524,7 @@
             <h3>DÚVIDAS, LEGIONÁRIO?</h3>
             <p>O enigma espera por você. Honre o nome de Roma.</p>
             <p style="margin-top: 15px; color: var(--gold);"><strong>Quarto Inicial:</strong> 0enigmasete &nbsp;|&nbsp; <strong>Objetivo:</strong> 7enigmasete</p>
-            <p style="margin-top: 40px; font-size: 0.8em; letter-spacing: 5px;">Marco-8319</p>
+            <p style="margin-top: 40px; font-size: 0.8em; letter-spacing: 5px;">S P Q R</p>
         </div>
     </div>
 
